@@ -19,11 +19,11 @@ class CarAPI:
             make = data.get('make')
             model = data.get('model')
             year = data.get('year')
-            trim = data.get('trim')
+            fuel = data.get('fuel')
             cylinders = data.get('cylinders')
 
             # Create a new car object
-            car = Cars(make=make, model=model, year=year, trim=trim, cylinders=cylinders)
+            car = Cars(make=make, model=model, year=year, fuel=fuel, cylinders=cylinders)
 
             try:
                 # Add car to the database
