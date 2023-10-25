@@ -5,10 +5,11 @@ import random
 from __init__ import app, db
 from model.cars import Cars
 
-car_api = Blueprint('car', __name__, url_prefix='/api/car')
+car_api = Blueprint('car', __name__, 
+                    url_prefix='/api/car')
 # API generator https://flask-restful.readthedocs.io/en/latest/api.html#id1
 
-
+        
 api = Api(car_api)
 class cars:
     class _getCars(Resource):
@@ -20,6 +21,10 @@ class cars:
         def get(self):
             car = db.session.query(Cars).filter(Cars.id == int(request.args.get("id"))).first()
             return jsonify(car.alldetails())
+
+class _Read(Resource):
+    def get(self):
+        return jsonify(_getCars())
     
     api.add_resource(_getCars, "/cars")
     api.add_resource(_getcardetails, "/cardetails")

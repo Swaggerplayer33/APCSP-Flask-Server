@@ -11,9 +11,9 @@ class Cars(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     make = db.Column(db.String(128), unique=True, nullable=False)
     model = db.Column(db.String(256), nullable=False)
-    year = db.Column(db.String(256), nullable=False)  # Assuming instructions can be nullable
-    trim = db.Column(db.String(64), nullable=False)  # Assuming image_name can be nullable
-    cylinders = db.Column(db.String(256), nullable=False)  # Assuming cleaned_ingredients can be nullable
+    year = db.Column(db.String(256), nullable=False)
+    trim = db.Column(db.String(64), nullable=False)
+    cylinders = db.Column(db.String(256), nullable=False)
 
     def __init__(self, make, model, year, trim, cylinders):
         self.make = make
@@ -32,8 +32,7 @@ class Cars(db.Model, UserMixin):
             "cylinders": self.cylinders
         }
 
-# Favorite mode
-# Function to initialize recipes
+# Function to initialize cars
 def initCars():
     with app.app_context():
         print("Loading Cars")
@@ -41,28 +40,35 @@ def initCars():
         if db.session.query(Cars).count() > 0:
             return
 
-        basedir = os.path.abspath(os.path.dirname(__file__))
-        file_path = os.path.join(basedir, "Flask-Server-Back-End-/CarStats.csv")  # Changed to use os.path.join for better compatibility
-        df = pd.read_csv(file_path)
+        # Get the directory of the script where it's located
+        script_dir = os.path.abspath(os.path.dirname(__file__))
 
-        for index, row in df.iterrows():
-            car = Cars(
-                make=row['Make'],
-                model=row['Model'],
-                year=row.get('Year', None),  # Added a get method to handle the possibility of the key not existing
-                trim=row.get('trim', None),
-                cylinders=row.get('cylinders', None)
-            )
+        # Define the relative path to the CSV file
+        relative_path = "CarStats.csv"
 
-            db.session.add(car)
-            try:
+        # Construct the absolute file path
+        file_path = os.path.join(script_dir, relative_path)
+
+        try:
+            df = pd.read_csv(file_path)
+
+            for index, row in df.iterrows():
+                car = Cars(
+                    make=row['Make'],
+                    model=row['Model'],
+                    year=row.get('Year', None),
+                    trim=row.get('trim', None),
+                    cylinders=row.get('cylinders', None)
+                )
+
+                db.session.add(car)
                 db.session.commit()
-            except IntegrityError:
-                db.session.rollback()
-                print(f"Duplicate car or error: {Cars.title}")
-            except Exception as e:
-                db.session.rollback()
-                print(f"Error adding car at index {index}: {str(e)}")
+        except IntegrityError:
+            db.session.rollback()
+            print("Duplicate car or error")
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error adding car: {str(e)}")
 
 if __name__ == "__main__":
     initCars()
