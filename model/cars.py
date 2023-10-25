@@ -42,7 +42,7 @@ def initCars():
             return
 
         basedir = os.path.abspath(os.path.dirname(__file__))
-        file_path = os.path.join(basedir, "/Flask-Server-Back-End/CarStats.csv")  # Changed to use os.path.join for better compatibility
+        file_path = os.path.join(basedir, "Flask-Server-Back-End-/CarStats.csv")  # Changed to use os.path.join for better compatibility
         df = pd.read_csv(file_path)
 
         for index, row in df.iterrows():
