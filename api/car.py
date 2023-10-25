@@ -13,34 +13,36 @@ class CarAPI:
     class _Create(Resource):
         def post(self):
             # Get request JSON data
-            data = request.get_json()
+            body = request.get_json()
 
             # Extract car information
-            make = data.get('make')
-            model = data.get('model')
-            year = data.get('year')
-            fuel = data.get('fuel')
-            cylinders = data.get('cylinders')
+            make = body.get('make')
+            model = body.get('model')
+            year = body.get('year')
+            fuel = body.get('fuel')
+            cylinders = body.get('cylinders')
 
             # Create a new car object
-            car = Cars(make=make, model=model, year=year, fuel=fuel, cylinders=cylinders)
+            car_obj = Cars(make=make, model=model, year=year, fuel=fuel, cylinders=cylinders)
 
-            try:
-                # Add car to the database
-                car.create()
-                # Return the created car as JSON
-                return jsonify(car.alldetails()), 201  # HTTP status 201 (Created)
-            except:
-                return {'message': 'Invalid input, correct fields should be make, model, year, trim, and cylinders'}, 400
+#2: Key Code block to add song to database 
+            # create song in database
+            car = car_obj.create()
+            # success returns json of song
+            if car:
+                return jsonify(car.read())
+            # failure returns error
+            return {'message': f'Invalid input, correct fields should be character, song_name, artist, and genre'}, 400
 
+            
     class _Read(Resource):
         def get(self):
-            # Retrieve all cars from the database
-            cars = Cars.query.all()
-            json_ready = [car.alldetails() for car in cars]
-            # Return the JSON response
+        # Retrieve all songs from the database
+            Cars = Car.query.all()
+            json_ready = [car.to_dict() for car in cars]
+        # Return the JSON response
             return jsonify(json_ready)
 
-    # Define API routes
+    # building RESTapi resources/interfaces, these routes are added to Web Server
     api.add_resource(_Create, '/create')
     api.add_resource(_Read, '/')
