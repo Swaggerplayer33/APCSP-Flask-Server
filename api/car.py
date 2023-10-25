@@ -1,44 +1,46 @@
-# Import necessary Flask and Flask-RESTful modules
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from flask_restful import Api, Resource, reqparse
+from __init__ import db
+from model.cars import Cars  # Import the car model
 
-# Import your Flask app and database instance
-from __init__ import app, db
+# Create a Blueprint for the car API
+car_api = Blueprint('car_api', __name__, url_prefix='/api/car')
 
-# Import the Cars model from your project
-from model.cars import Cars
-
-# Create a Blueprint for the car-related API
-car_api = Blueprint('car', __name__, url_prefix='/api/car')
+# Create the API instance
 api = Api(car_api)
 
-# Define a resource for retrieving a list of all cars
-class CarsResource(Resource):
-    def get(self):
-        # Query the database to get all cars
-        cars = db.session.query(Cars).all()
-        # Return a JSON response with details for all cars
-        return jsonify([car.alldetails() for car in cars])
+class CarAPI:
+    class _Create(Resource):
+        def post(self):
+            # Get request JSON data
+            data = request.get_json()
 
-# Define a resource for retrieving details of a specific car by ID
-class CarDetailsResource(Resource):
-    def get(self):
-        # Use reqparse to parse the 'id' query parameter from the request
-        parser = reqparse.RequestParser()
-        parser.add_argument('id', type=int)
-        args = parser.parse_args()
-        
-        # Query the database to find the car with the specified ID
-        car = db.session.query(Cars).filter(Cars.id == args['id']).first()
-        
-        # Check if the car is found
-        if car:
-            # Return a JSON response with details for the specific car
-            return jsonify(car.alldetails())
-        else:
-            # Return a JSON response with an error message and a 404 status code if the car is not found
-            return jsonify({'error': 'Car not found'}), 404
+            # Extract car information
+            make = data.get('make')
+            model = data.get('model')
+            year = data.get('year')
+            trim = data.get('trim')
+            cylinders = data.get('cylinders')
 
-# Add the CarsResource and CarDetailsResource to the Flask-RESTful API
-api.add_resource(CarsResource, '/cars')
-api.add_resource(CarDetailsResource, '/cardetails')
+            # Create a new car object
+            car = Cars(make=make, model=model, year=year, trim=trim, cylinders=cylinders)
+
+            try:
+                # Add car to the database
+                car.create()
+                # Return the created car as JSON
+                return jsonify(car.alldetails()), 201  # HTTP status 201 (Created)
+            except:
+                return {'message': 'Invalid input, correct fields should be make, model, year, trim, and cylinders'}, 400
+
+    class _Read(Resource):
+        def get(self):
+            # Retrieve all cars from the database
+            cars = Cars.query.all()
+            json_ready = [car.alldetails() for car in cars]
+            # Return the JSON response
+            return jsonify(json_ready)
+
+    # Define API routes
+    api.add_resource(_Create, '/create')
+    api.add_resource(_Read, '/')
