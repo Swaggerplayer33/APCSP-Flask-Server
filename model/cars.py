@@ -10,10 +10,10 @@ headers = {
 	"X-RapidAPI-Host": "cars-by-api-ninjas.p.rapidapi.com"
 }
 
-response = requests.get(url, headers=headers, params=querystring)
 
-print(response.json())
-
+def responses():
+    response = requests.get(url, headers=headers, params=querystring)
+    return response
 
 
 #import requests
