@@ -3,7 +3,7 @@ from __init__ import db
 # Define the "Car" model
 class Car(db.Model):
     # Define the table name in the database
-    __tablename__ = 'cars'
+    __tablename__ = "Car"
 
     # Define model fields (columns)
     id = db.Column(db.Integer, primary_key=True)  # Primary key column
@@ -56,5 +56,4 @@ def initCars():
     Mclaren720S = Car(make="McLaren", model="720 S", year="2024", fuel="Gas", cylinders="6"),
     MaseratiQuattroporte = Car(make="Maserati", model="Quattroporte", year="CNG", fuel="", cylinders="None"),
     AudiR8Spyder = Car(make="Audi", model="R8 Spyder", year="2022", fuel="Hydrogen Powered", cylinders="8"),
-
-db.session.commit()    
+    db.session.commit()
