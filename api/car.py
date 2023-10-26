@@ -1,7 +1,9 @@
 from flask import Blueprint, jsonify, request
 from flask_restful import Api, Resource, reqparse
+from flask_restful import reqparse
 from __init__ import db
 from model.cars import Car  # Import the car model
+import requests
 
 # Create a Blueprint for the car API
 car_api = Blueprint('car_api', __name__, url_prefix='/api/car')
@@ -39,6 +41,10 @@ class CarAPI:
         def get(self):
         # Retrieve all songs from the database
             Cars = Car.query.all()
+
+            for car in Cars:
+                print(car.to_dict()) #prints the cars
+
             json_ready = [car.to_dict() for car in Cars]
         # Return the JSON response
             return jsonify(json_ready)
