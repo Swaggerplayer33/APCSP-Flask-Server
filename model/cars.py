@@ -5,8 +5,8 @@ class Car(db.Model):
     # Define the table name in the database
     __tablename__ = "Car"
 
-    # Define model fields (columns)
-    id = db.Column(db.Integer, primary_key=True)  # Primary key column
+    # This defines all of the attributes of a car that we will display
+    id = db.Column(db.Integer, primary_key=True)  
     make = db.Column(db.String, nullable=False)
     model = db.Column(db.String, nullable=False)
     year = db.Column(db.String, nullable=False)
