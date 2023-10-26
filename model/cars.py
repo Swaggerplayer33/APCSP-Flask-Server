@@ -54,6 +54,17 @@ def initCars():
     BentleyContinentalGT = Car(make="Bentley", model="Continental GT", year="2023", fuel="Gas", cylinders="10"),
     Porsche911Targa = Car(make="Porsche", model="911 Targa", year="2023", fuel="Gas", cylinders="8"),
     Mclaren720S = Car(make="McLaren", model="720 S", year="2024", fuel="Gas", cylinders="6"),
-    MaseratiQuattroporte = Car(make="Maserati", model="Quattroporte", year="CNG", fuel="", cylinders="None"),
+    MaseratiQuattroporte = Car(make="Maserati", model="Quattroporte", year="2021", fuel="CNG", cylinders="None"),
     AudiR8Spyder = Car(make="Audi", model="R8 Spyder", year="2022", fuel="Hydrogen Powered", cylinders="8"),
+    MercedesBenz300SLGullwing = Car(make="Mercedes Benz", model="300 SL Gullwing", year="2021", fuel="Gas", cylinders="6")
+    Ferrari250GTCalifornia = Car(make="Ferrari", model="250 GT California", year="2023", fuel="Gas", cylinders="8")
+    BentleyFlyingSpur = Car(make="Bentley", model="Flying Spur", year="2021", fuel="Gas", cylinders="4")
+    AudiA8 = Car(make="Audi", model="A8", year="2022", fuel="Gas", cylinders="8")
+    JaguarFType = Car(make="Jaguar", model="F-Type", year="2020", fuel="Gas", cylinders="10")
+    LamborghiniHuracan = Car(make="Lamborghini", model="Huracan", year="2024", fuel="Hydrogen Powered", cylinders="12")
+    RivianR1S = Car(make="Rivian", model="R1S", year="2023", fuel="Electricity", cylinders="0")
+    MercedesBenzMaybachSClass = Car(make="Mercedes Benz", model="Maybach S Class", year="2022", fuel="Gas", cylinders="6")
+    BMW7Series = Car(make="BMW", model="7 Series", year="2021", fuel="Hydrogen Powered", cylinders="8")
+    LincolnContinental = Car(make="Lincoln", model="Continental", year="2020", fuel="Gas", cylinders="4")
+    RivianR1T = Car(make="Rivian", model="R1T", year="2022", fuel="Electricity", cylinders="0")
     db.session.commit()
