@@ -1,6 +1,5 @@
 from flask import Blueprint, jsonify, request
 from flask_restful import Api, Resource, reqparse
-from flask_restful import reqparse
 from __init__ import db
 from model.cars import Car  # Import the car model
 import requests
@@ -27,10 +26,10 @@ class CarAPI:
             # Create a new car object
             car_obj = Car(make=make, model=model, year=year, fuel=fuel, cylinders=cylinders)
 
-#2: Key Code block to add song to database 
-            # create song in database
+#2: Key Code block to add car to database 
+            # create car in database
             car = car_obj.create()
-            # success returns json of song
+            # success returns json of car
             if car:
                 return jsonify(car.read())
             # failure returns error
@@ -39,12 +38,8 @@ class CarAPI:
             
     class _Read(Resource):
         def get(self):
-        # Retrieve all songs from the database
+        # Retrieve all cars from the database
             Cars = Car.query.all()
-
-            for car in Cars:
-                print(car.to_dict()) #prints the cars
-
             json_ready = [car.to_dict() for car in Cars]
         # Return the JSON response
             return jsonify(json_ready)
