@@ -48,7 +48,9 @@ def table():
     return render_template("table.html")
 
 @app.before_first_request
-def activate_job():  # activate these items 
+def activate_job(): # activate these items 
+    db.drop_all() #drops preexisting entries fetched by api
+    db.create_all() #recreates api entries
     initJokes()
     initUsers()
     initPlayers()
