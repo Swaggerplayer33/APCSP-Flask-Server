@@ -67,4 +67,4 @@ def initCars():
     BMW7Series = Car(make="BMW", model="7 Series", year="2021", fuel="Hydrogen Powered", cylinders="8"); db.session.add(BMW7Series)
     LincolnContinental = Car(make="Lincoln", model="Continental", year="2020", fuel="Gas", cylinders="4"); db.session.add(LincolnContinental)
     RivianR1T = Car(make="Rivian", model="R1T", year="2022", fuel="Electricity", cylinders="None"); db.session.add(RivianR1T)
-db.session.commit()
+    db.session.commit()
