@@ -42,8 +42,10 @@ def submit_form():
         if user and email:
             send_email(user, email)
             return "Email sent successfully."
+        # This returns when the email is actually sent
         else:
             return "User and email are required."
+        # This shows up when user hasn't entered a valid email or has some other issue
 
 # Run the Flask app
 if __name__ == '__main__':
