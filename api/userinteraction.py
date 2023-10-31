@@ -1,71 +1,80 @@
 import random
 
-car_data = []
+class CarModel:
+    def __init__(self):
+        self.car_data = []
 
-# Initialize car models
-def initCars():
-    car_list = [
-        {"id": 0, "model": "Model A", "likes": 0, "dislikes": 0},
-        {"id": 1, "model": "Model B", "likes": 0, "dislikes": 0},
-        {"id": 2, "model": "Model C", "likes": 0, "dislikes": 0},
-        # Add more car models as needed
-    ]
-    
-    for car in car_list:
-        car_data.append(car)
+    def init_cars(self):
+        car_list = [
+            {"id": 0, "model": "Model A", "likes": 0, "dislikes": 0},
+            {"id": 1, "model": "Model B", "likes": 0, "dislikes": 0},
+            {"id": 2, "model": "Model C", "likes": 0, "dislikes": 0},
+            # Add more car models as needed
+        ]
+        self.car_data.extend(car_list)
 
-# Return all car models from car_data
-def getCars():
-    return car_data
+    def get_cars(self):
+        """Return all car models."""
+        return self.car_data
 
-# Car model getter
-def getCar(id):
-    return car_data[id]
+    def get_car(self, car_id):
+        """Return a car model by its ID."""
+        for car in self.car_data:
+            if car['id'] == car_id:
+                return car
+        raise ValueError("Car with ID {} not found".format(car_id))
 
-# Return random car model from car_data
-def getRandomCar():
-    return random.choice(car_data)
+    def get_random_car(self):
+        """Return a random car model."""
+        if not self.car_data:
+            return None
+        return random.choice(self.car_data)
 
-# Liked car model
-def likeCar(id):
-    car_data[id]['likes'] += 1
-    return car_data[id]['likes']
+    def like_car(self, car_id):
+        """Increment the like count for a car model."""
+        car = self.get_car(car_id)
+        car['likes'] += 1
+        return car['likes']
 
-# Disliked car model
-def dislikeCar(id):
-    car_data[id]['dislikes'] += 1
-    return car_data[id]['dislikes']
+    def dislike_car(self, car_id):
+        """Increment the dislike count for a car model."""
+        car = self.get_car(car_id)
+        car['dislikes'] += 1
+        return car['dislikes']
 
-# Print car model details
-def printCar(car):
-    print(f"Car Model ID: {car['id']}")
-    print(f"Model Name: {car['model']}")
-    print(f"Likes: {car['likes']}")
-    print(f"Dislikes: {car['dislikes']}")
+    def print_car(self, car):
+        """Print the details of a car model."""
+        if car is not None:
+            print(f"Car Model ID: {car['id']}")
+            print(f"Model Name: {car['model']}")
+            print(f"Likes: {car['likes']}")
+            print(f"Dislikes: {car['dislikes']}")
+        else:
+            print("Car not found.")
 
-# Number of car models
-def countCars():
-    return len(car_data)
+    def count_cars(self):
+        """Return the number of car models."""
+        return len(self.car_data)
 
-# Test Car Model API
 if __name__ == "__main__":
-    initCars()  # Initialize car models
-    
-    # Random car model
-    random_car = getRandomCar()
+    car_manager = CarModel()
+    car_manager.init_cars()
+
+    random_car = car_manager.get_random_car()
     print("Random Car Model")
-    printCar(random_car)
-    
-    # Like and dislike car models
-    car_id = random.randint(0, countCars() - 1)  # Choose a random car model
-    likeCar(car_id)
-    print(f"Liked Car Model {car_id}")
-    printCar(getCar(car_id))
-    
-    car_id = random.randint(0, countCars() - 1)  # Choose another random car model
-    dislikeCar(car_id)
-    print(f"Disliked Car Model {car_id}")
-    printCar(getCar(car_id))
-    
-    # Count of car models
-    print("Car Models Count: " + str(countCars()))
+    car_manager.print_car(random_car)
+
+    try:
+        car_id = random.choice(car_manager.get_cars())['id']
+        car_manager.like_car(car_id)
+        print(f"Liked Car Model {car_id}")
+        car_manager.print_car(car_manager.get_car(car_id))
+        
+        car_id = random.choice(car_manager.get_cars())['id']
+        car_manager.dislike_car(car_id)
+        print(f"Disliked Car Model {car_id}")
+        car_manager.print_car(car_manager.get_car(car_id))
+    except ValueError as e:
+        print(e)
+        
+    print("Car Models Count:", car_manager.count_cars())
