@@ -28,7 +28,7 @@ def send_email(user, email):
     )
 
     # Send the email using SendGrid
-    sg = sendgrid.SendGridAPIClient(api_key="YOUR_SENDGRID_API_KEY")
+    sg = sendgrid.SendGridAPIClient(api_key="08d7639959msh856cfb5944a18fap147283jsnf269b28df190")
     sg.send(message)
 
 # Define a route for form submission
