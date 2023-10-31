@@ -1,63 +1,73 @@
-from flask import Blueprint, jsonify, request
-from flask_restful import Api, Resource, reqparse, inputs
+from flask import Blueprint, request, jsonify
+from flask_restful import Api, Resource # used for REST API building
+
 from model.players import Player
 
-# Define a more descriptive name for the blueprint and API
-player_blueprint = Blueprint('player_blueprint', __name__, url_prefix='/api/players')
-api = Api(player_blueprint)
+# Change variable name and API name and prefix
+player_api = Blueprint('player_api', __name__,
+                   url_prefix='/api/players')
 
-# Define a more specific class name and separate resources for different actions
-class PlayerResource(Resource):
-    def __init__(self):
-        # Use RequestParser for better validation and error handling
-        self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('name', type=str, required=True, help='Name cannot be blank', location='json')
-        self.reqparse.add_argument('uid', type=str, required=True, help='UID cannot be blank', location='json')
-        self.reqparse.add_argument('password', type=str, location='json')
-        self.reqparse.add_argument('tokens', type=int, location='json')
-        super(PlayerResource, self).__init__()
+# API docs https://flask-restful.readthedocs.io/en/latest/api.html
+api = Api(player_api)
 
-    def post(self):
-        args = self.reqparse.parse_args()
-        # Check for name length
-        if len(args['name']) < 2:
-            return {'message': 'Name must be at least 2 characters long'}, 400
+class PlayerAPI:     
+    class Action(Resource):
+        def post(self):
+            ''' Read data for json body '''
+            body = request.get_json()
+            
+            ''' Avoid garbage in, error checking '''
+            # validate name
+            name = body.get('name')
+            if name is None or len(name) < 2:
+                return {'message': f'Name is missing, or is less than 2 characters'}, 210
+            # validate uid
+            uid = body.get('uid')
+            if uid is None or len(uid) < 2:
+                return {'message': f'User ID is missing, or is less than 2 characters'}, 210
+            # look for password and tokens
+            password = body.get('password')
+            tokens = body.get('tokens')
 
-        # Check for UID length
-        if len(args['uid']) < 2:
-            return {'message': 'UID must be at least 2 characters long'}, 400
-        
-        # Create player object
-        player = Player(name=args['name'], uid=args['uid'], tokens=args['tokens'])
-        if args['password']:
-            player.set_password(args['password'])
-        
-        # Save to database
-        created_player = player.create()
-        if created_player:
-            return jsonify(player.read())
-        
-        return {'message': f'Error processing {args["name"]}. UID {args["uid"]} might be duplicate'}, 400
+            ''' #1: Key code block, setup PLAYER OBJECT '''
+            po = Player(name=name, 
+                        uid=uid,
+                        tokens=tokens)
+            
+            ''' Additional garbage error checking '''
+            # set password if provided
+            if password is not None:
+                po.set_password(password)            
+            
+            ''' #2: Key Code block to add user to database '''
+            # create player in database
+            player = po.create()
+            # success returns json of player
+            if player:
+                return jsonify(player.read())
+            # failure returns error
+            return {'message': f'Processed {name}, either a format error or User ID {uid} is duplicate'}, 210
 
-    def get(self):
-        players = Player.query.all()
-        return jsonify([player.read() for player in players])
+        def get(self):
+            players = Player.query.all()    # read/extract all players from database
+            json_ready = [player.read() for player in players]  # prepare output in json
+            return jsonify(json_ready)  # jsonify creates Flask response object, more specific to APIs than json.dumps
 
-    def put(self):
-        args = self.reqparse.parse_args()
-        player = Player.query.get(args['uid'])
-        if player:
-            player.update(args)
+        def put(self):
+            body = request.get_json() # get the body of the request
+            uid = body.get('uid') # get the UID (Know what to reference)
+            data = body.get('data')
+            player = Player.query.get(uid) # get the player (using the uid in this case)
+            player.update(data)
             return f"{player.read()} Updated"
-        return {'message': 'Player not found'}, 404
 
-    def delete(self):
-        args = self.reqparse.parse_args()
-        player = Player.query.get(args['uid'])
-        if player:
+        def delete(self):
+            body = request.get_json()
+            uid = body.get('uid')
+            player = Player.query.get(uid)
             player.delete()
             return f"{player.read()} Has been deleted"
-        return {'message': 'Player not found'}, 404
 
 
-api.add_resource(PlayerResource, '/')
+    # building RESTapi endpoint, method distinguishes action
+    api.add_resource(Action, '/')
