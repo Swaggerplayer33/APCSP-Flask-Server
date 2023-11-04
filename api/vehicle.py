@@ -172,9 +172,3 @@ class VehiclesAPI:
 api.add_resource(VehiclesAPI._Read, '/')
 api.add_resource(VehiclesAPI._Like, '/like/<string:make>/<string:model>')
 api.add_resource(VehiclesAPI._Dislike, '/dislike/<string:make>/<string:model>')
-
-if __name__ == "__main__":
-    from flask import Flask
-    app = Flask(__name__)
-    app.register_blueprint(vehicles_api)
-    app.run(debug=True, host="0.0.0.0", port=8420)
