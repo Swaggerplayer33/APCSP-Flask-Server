@@ -15,11 +15,11 @@ class Car(db.Model):
 
     # Constructor to initialize a new car object
     def __init__(self, make, model, year, fuel, cylinders):
-        self.make = make
-        self.model = model
-        self.year = year
-        self.fuel = fuel
-        self.cylinders = cylinders
+        self.make = make #initialize make
+        self.model = model #initialize model
+        self.year = year #initialize year
+        self.fuel = fuel #initialize fuel
+        self.cylinders = cylinders #initialize cylinders
 
     def to_dict(self):
         return {"make": self.make, "model": self.model, "year": self.year, "fuel": self.fuel, "cylinders": self.cylinders}
@@ -27,10 +27,10 @@ class Car(db.Model):
     def create(self):
         try:
             db.session.add(self)  # add prepares to persist object to table
-            db.session.commit()  # SQLAlchemy requires a manual commit
+            db.session.commit()  # SQLAlchemy requires a manual commit to get it working
             return self
         except: 
-            db.session.remove() # remove object from table if invalid
+            db.session.remove() # remove object from table if invalid, if the car doesn't exist, then the car is removed. 
             return None
 
     # Method to return car details for API response
@@ -44,7 +44,7 @@ class Car(db.Model):
             "cylinders": self.cylinders
         }
 
-def initCars():
+def initCars(): #This is the library full of cars and their attributes
     BugattiChiron = Car(make="Bugatti", model="Chiron", year="2021", fuel="Gas", cylinders="16"); db.session.add(BugattiChiron)
     TeslaRoadster = Car(make="Tesla", model="Roadster", year="2024", fuel="Electricity", cylinders="None"); db.session.add(TeslaRoadster)
     RollsRoycePhantom = Car(make="Rolls Royce", model="Phantom", year="2021", fuel="Gas", cylinders="8"); db.session.add(RollsRoycePhantom)
