@@ -66,5 +66,10 @@ def initCars(): #This is the library full of cars and their attributes
     MercedesBenzMaybachSClass = Car(make="Mercedes Benz", model="Maybach S Class", year="2022", fuel="Gas", cylinders="6"); db.session.add(MercedesBenzMaybachSClass)
     BMW7Series = Car(make="BMW", model="7 Series", year="2021", fuel="Hydrogen Powered", cylinders="8"); db.session.add(BMW7Series)
     LincolnContinental = Car(make="Lincoln", model="Continental", year="2020", fuel="Gas", cylinders="4"); db.session.add(LincolnContinental)
-    RivianR1T = Car(make="Rivian", model="R1T", year="2022", fuel="Electricity", cylinders="None"); db.session.add(RivianR1T)
+    RivianR1T = Car(make="Rivian", model="R1T", year="2022", fuel="Electricity", cylinders="None"); 
+    TeslaCybertruck = Car(make="Tesla", model="Cybertruck", year="2023", fuel="Electricity", cylinders="None")
+    db.session.add(TeslaCybertruck)
+    LamborghiniUrus = Car(make="Lamborghini", model="Urus", year="2023", fuel="Gas", cylinders="8")
+    db.session.add(LamborghiniUrus)
+    db.session.add(RivianR1T)
     db.session.commit()
