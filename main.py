@@ -14,7 +14,6 @@ from model.cars import initCars
 from model.vehicles import initVehicles
 from api.job import job_api
 # database migrations
-from model.users import initUsers
 from model.reviews import initReviews
 from model.jobs import initJobs
 from model.jobuser import initJobsUsers
@@ -44,7 +43,7 @@ app.register_blueprint(vehicles_api) #register vehicles api
 app.register_blueprint(user_api) # register api routes
 app.register_blueprint(job_api)
 app.register_blueprint(jobuser_api)
-app.register_blueprint(app_projects) # register app pages
+# app.register_blueprint(app_projects) # register app pages
 app.register_blueprint(review_api)
 
 @app.errorhandler(404)  # catch for URL not found
